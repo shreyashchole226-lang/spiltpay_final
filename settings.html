@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - SplitPay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =======================
+   ROOT VARIABLES
+======================= */
+:root {
+  --bg: #0a0012;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --secondary: #ec4899;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --card: #1e1b2e;
+  --card-hover: #252238;
+  --border: rgba(139, 92, 246, 0.15);
+  --border-hover: rgba(139, 92, 246, 0.3);
+  --shadow: 0 20px 50px rgba(139, 92, 246, 0.15);
+  --shadow-lg: 0 30px 70px rgba(139, 92, 246, 0.25);
+  --radius: 20px;
+  --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --gradient-2: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
+
+/* =======================
+   GLOBAL RESET
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* =======================
+   ANIMATIONS
+======================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =======================
+   BACKGROUND
+======================= */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(99, 102, 241, 0.15), transparent 50%),
+              radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.15), transparent 50%),
+              radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent 50%);
+  z-index: -2;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.bg-accent {
+  position: fixed;
+  top: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 70%);
+  border-radius: 50%;
+  z-index: -2;
+  animation: float 6s ease-in-out infinite;
+  filter: blur(80px);
+}
+
+.bg-accent-2 {
+  position: fixed;
+  bottom: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.25), transparent 70%);
+  border-radius: 50%;
+  z-index: -2;
+  animation: float 8s ease-in-out infinite reverse;
+  filter: blur(80px);
+}
+
+/* =======================
+   SETTINGS PAGE
+======================= */
+.settings-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  animation: slideDown 0.6s ease;
+}
+
+.page-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-outline {
+  padding: 12px 24px;
+  border: 2px solid var(--border);
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-outline:hover {
+  background: var(--card);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+}
+
+.settings-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  animation: fadeInUp 0.5s ease backwards;
+}
+
+.settings-section:nth-child(2) { animation-delay: 0.1s; }
+.settings-section:nth-child(3) { animation-delay: 0.2s; }
+.settings-section:nth-child(4) { animation-delay: 0.3s; }
+.settings-section:nth-child(5) { animation-delay: 0.4s; }
+
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.section-description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-label {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.setting-hint {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+  border: 1px solid var(--border);
+}
+
+.toggle-switch.active {
+  background: var(--gradient-1);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.active::after {
+  transform: translateX(24px);
+}
+
+/* Select Dropdown */
+.setting-select {
+  padding: 12px 18px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  color: var(--text);
+  min-width: 150px;
+}
+
+.setting-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.setting-select option {
+  background: var(--card);
+  color: var(--text);
+}
+
+/* Profile Section */
+.profile-card {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 28px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 16px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--gradient-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.profile-email {
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  padding: 6px 14px;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.btn-edit {
+  padding: 12px 24px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-edit:hover {
+  border-color: var(--accent);
+  background: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+}
+
+/* Export Section */
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.export-card {
+  padding: 24px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+
+.export-card:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+}
+
+.export-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.export-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.export-description {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Data Management */
+.data-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.data-stat {
+  text-align: center;
+  padding: 20px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.data-stat-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.data-stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.danger-zone {
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.danger-title {
+  font-weight: 700;
+  color: var(--error);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+}
+
+.danger-description {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.btn-danger {
+  padding: 14px 28px;
+  background: var(--error);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* About Section */
+.about-info {
+  margin-bottom: 24px;
+}
+
+.about-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-item:last-child {
+  border-bottom: none;
+}
+
+.about-label {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.about-value {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.social-btn {
+  width: 48px;
+  height: 48px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.social-btn:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  animation: slideInRight 0.3s ease;
+  min-width: 280px;
+}
+
+.toast.success {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.toast.error {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.toast.warning {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.toast.success .toast-icon { color: var(--success); }
+.toast.error .toast-icon { color: var(--error); }
+.toast.warning .toast-icon { color: var(--warning); }
+
+.toast-message {
+  flex: 1;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(150px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 24px 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .data-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="bg-accent"></div>
+  <div class="bg-accent-2"></div>
+
+  <div class="settings-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Manage your preferences and account</p>
+      </div>
+      <a href="dashboard.html" class="btn-outline">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Profile -->
+    <div class="settings-section">
+      <h3 class="section-title">Profile</h3>
+      <p class="section-description">Your personal information</p>
+      
+      <div class="profile-card">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-info">
+          <h2 class="profile-name">John Doe</h2>
+          <p class="profile-email">john.doe@example.com</p>
+          <div class="profile-badges">
+            <span class="badge">✓ Verified</span>
+            <span class="badge">Pro Member</span>
+          </div>
+        </div>
+        <button class="btn-edit">Edit Profile</button>
+      </div>
+    </div>
+
+    <!-- General Settings -->
+    <div class="settings-section">
+      <h3 class="section-title">General</h3>
+      <p class="section-description">Customize your experience</p>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Currency</div>
+          <div class="setting-hint">Default currency for all transactions</div>
+        </div>
+        <select class="setting-select" id="currency">
+          <option value="INR">₹ INR</option>
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+          <option value="GBP">£ GBP</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Language</div>
+          <div class="setting-hint">Interface language</div>
+        </div>
+        <select class="setting-select" id="language">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Default Tip</div>
+          <div class="setting-hint">Default tip percentage</div>
+        </div>
+        <select class="setting-select" id="defaultTip">
+          <option value="0">No Tip</option>
+          <option value="10" selected>10%</option>
+          <option value="15">15%</option>
+          <option value="20">20%</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="settings-section">
+      <h3 class="section-title">Notifications</h3>
+      <p class="section-description">Manage your notification preferences</p>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Email Notifications</div>
+          <div class="setting-hint">Receive updates via email</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Split Reminders</div>
+          <div class="setting-hint">Get reminded about pending splits</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Payment Confirmations</div>
+          <div class="setting-hint">Notify when payments are received</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+      </div>
+    </div>
+
+    <!-- Privacy -->
+    <div class="settings-section">
+      <h3 class="section-title">Privacy & Data</h3>
+      <p class="section-description">Control your privacy settings</p>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Analytics & Insights</div>
+          <div class="setting-hint">Enable spending analytics features</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Share Usage Data</div>
+          <div class="setting-hint">Help improve SplitPay (anonymous)</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+      </div>
+    </div>
+
+    <!-- Export Data -->
+    <div class="settings-section">
+      <h3 class="section-title">Export Data</h3>
+      <p class="section-description">Download your split history in various formats</p>
+
+      <div class="export-grid">
+        <div class="export-card" onclick="exportData('csv')">
+          <div class="export-icon">📊</div>
+          <div class="export-title">CSV</div>
+          <div class="export-description">Spreadsheet format</div>
+        </div>
+        <div class="export-card" onclick="exportData('json')">
+          <div class="export-icon">📄</div>
+          <div class="export-title">JSON</div>
+          <div class="export-description">Raw data format</div>
+        </div>
+        <div class="export-card" onclick="exportData('pdf')">
+          <div class="export-icon">📑</div>
+          <div class="export-title">PDF</div>
+          <div class="export-description">Printable report</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="settings-section">
+      <h3 class="section-title">Data Management</h3>
+      <p class="section-description">Manage your stored data</p>
+
+      <div class="data-stats">
+        <div class="data-stat">
+          <div class="data-stat-value">156</div>
+          <div class="data-stat-label">Splits Saved</div>
+        </div>
+        <div class="data-stat">
+          <div class="data-stat-value">47</div>
+          <div class="data-stat-label">Friends</div>
+        </div>
+        <div class="data-stat">
+          <div class="data-stat-value">4</div>
+          <div class="data-stat-label">Groups</div>
+        </div>
+        <div class="data-stat">
+          <div class="data-stat-value">2.4 KB</div>
+          <div class="data-stat-label">Storage Used</div>
+        </div>
+      </div>
+
+      <div class="danger-zone">
+        <div class="danger-title">
+          <span>⚠️</span>
+          <span>Danger Zone</span>
+        </div>
+        <div class="danger-description">
+          These actions are permanent and cannot be undone. Please proceed with caution.
+        </div>
+        <button class="btn-danger" onclick="confirmClearHistory()">Clear All History</button>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="settings-section">
+      <h3 class="section-title">About SplitPay</h3>
+      
+      <div class="about-info">
+        <div class="about-item">
+          <span class="about-label">Version</span>
+          <span class="about-value">2.0.0</span>
+        </div>
+        <div class="about-item">
+          <span class="about-label">Last Updated</span>
+          <span class="about-value">Feb 8, 2026</span>
+        </div>
+        <div class="about-item">
+          <span class="about-label">License</span>
+          <span class="about-value">MIT License</span>
+        </div>
+      </div>
+
+      <div class="social-links">
+        <a href="#" class="social-btn" title="GitHub">🐙</a>
+        <a href="#" class="social-btn" title="Twitter">🐦</a>
+        <a href="#" class="social-btn" title="Discord">💬</a>
+        <a href="#" class="social-btn" title="Email">📧</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    function toggleSwitch(element) {
+      element.classList.toggle('active');
+      const isActive = element.classList.contains('active');
+      const label = element.previousElementSibling.querySelector('.setting-label').textContent;
+      showToast(`${label} ${isActive ? 'enabled' : 'disabled'}`, 'success');
+    }
+
+    function exportData(format) {
+      showToast(`Exporting data as ${format.toUpperCase()}...`, 'info');
+      
+      setTimeout(() => {
+        showToast(`${format.toUpperCase()} file downloaded!`, 'success');
+      }, 1500);
+    }
+
+    function confirmClearHistory() {
+      if (confirm('Are you sure you want to clear all history? This action cannot be undone.')) {
+        showToast('Clearing all history...', 'warning');
+        
+        setTimeout(() => {
+          showToast('All history cleared successfully', 'success');
+        }, 1000);
+      }
+    }
+
+    document.querySelectorAll('.setting-select').forEach(select => {
+      select.addEventListener('change', function() {
+        const settingName = this.options[this.selectedIndex].text;
+        showToast(`Setting updated to ${settingName}`, 'success');
+        localStorage.setItem(`setting_${this.id}`, this.value);
+      });
+    });
+
+    document.querySelectorAll('.setting-select').forEach(select => {
+      const savedValue = localStorage.getItem(`setting_${select.id}`);
+      if (savedValue) {
+        select.value = savedValue;
+      }
+    });
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+      
+      toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.info}</span>
+        <span class="toast-message">${message}</span>
+      `;
+      
+      document.getElementById('toastContainer').appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'toastSlideOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+  <!-- User Info & Logout Section -->
+<div style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 2px solid #8b5cf6;
+    z-index: 1000;
+">
+    <span id="userDisplay" style="color: #8b5cf6; font-weight: 600;">
+        Loading...
+    </span>
+    <button onclick="logout()" style="
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    ">
+        Logout
+    </button>
+</div>
+
+<script>
+// Display username
+window.addEventListener('load', async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/auth/check', {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        
+        if (data.authenticated) {
+            document.getElementById('userDisplay').textContent = 
+                `👋 ${data.user.username}`;
+        } else {
+            window.location.href = 'login.html';
+        }
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = 'login.html';
+    }
+});
+
+async function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        await fetch('http://127.0.0.1:5000/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+}
+</script>
+</body>
+</html>

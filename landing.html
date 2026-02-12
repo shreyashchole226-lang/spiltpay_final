@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SplitPay - Split Bills Instantly with Friends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =======================
+   ROOT VARIABLES
+======================= */
+:root {
+  --bg: #0a0012;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --secondary: #ec4899;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --card: #1e1b2e;
+  --card-hover: #252238;
+  --border: rgba(139, 92, 246, 0.15);
+  --border-hover: rgba(139, 92, 246, 0.3);
+  --shadow: 0 20px 50px rgba(139, 92, 246, 0.15);
+  --shadow-lg: 0 30px 70px rgba(139, 92, 246, 0.25);
+  --radius: 20px;
+  --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --gradient-2: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+}
+
+/* =======================
+   GLOBAL RESET
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* =======================
+   ANIMATIONS
+======================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+  }
+}
+
+@keyframes scrollLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollRight {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* =======================
+   BACKGROUND
+======================= */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(99, 102, 241, 0.15), transparent 50%),
+              radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.15), transparent 50%),
+              radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent 50%);
+  z-index: -2;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.bg-accent {
+  position: fixed;
+  top: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 70%);
+  border-radius: 50%;
+  z-index: -2;
+  animation: float 6s ease-in-out infinite;
+  filter: blur(80px);
+}
+
+.bg-accent-2 {
+  position: fixed;
+  bottom: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.25), transparent 70%);
+  border-radius: 50%;
+  z-index: -2;
+  animation: float 8s ease-in-out infinite reverse;
+  filter: blur(80px);
+}
+
+/* =======================
+   NAVIGATION
+======================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 0, 18, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  animation: fadeIn 1s ease-out;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+
+.logo-link:hover {
+  transform: translateY(-2px);
+}
+
+.logo-icon-nav {
+  background: var(--gradient-1);
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: glow 3s ease-in-out infinite;
+}
+
+.logo-icon-nav svg {
+  color: white;
+  width: 24px;
+  height: 24px;
+}
+
+.logo-text {
+  font-family: "Sora", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+  transition: all 0.3s;
+  position: relative;
+  font-size: 15px;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-1);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.btn-nav {
+  padding: 12px 28px;
+  background: var(--gradient-1);
+  color: var(--text);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+.btn-nav:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+}
+
+/* =======================
+   HERO SECTION
+======================= */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-light);
+  margin-bottom: 28px;
+  animation: fadeIn 0.8s ease 0.2s backwards;
+  border: 1px solid var(--border);
+}
+
+.hero-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 28px;
+  animation: fadeIn 0.8s ease 0.4s backwards;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.gradient-text {
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: 1.35rem;
+  color: var(--muted);
+  max-width: 700px;
+  margin: 0 auto 44px;
+  animation: fadeIn 0.8s ease 0.6s backwards;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeIn 0.8s ease 0.8s backwards;
+}
+
+.btn-primary-hero {
+  padding: 20px 44px;
+  background: var(--gradient-1);
+  color: var(--text);
+  border: none;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary-hero:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.6);
+}
+
+.btn-secondary-hero {
+  padding: 20px 44px;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-secondary-hero:hover {
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+}
+
+/* =======================
+   FEATURES SECTION
+======================= */
+.features {
+  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-light);
+  margin-bottom: 16px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.scroll-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.scroll-row {
+  display: flex;
+  gap: 24px;
+  animation: scrollLeft 40s linear infinite;
+}
+
+.scroll-row:nth-child(2) {
+  animation: scrollRight 40s linear infinite;
+}
+
+.feature-card {
+  min-width: 340px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.feature-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--gradient-1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+.feature-icon svg {
+  color: white;
+}
+
+.feature-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.feature-description {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* =======================
+   HOW IT WORKS
+======================= */
+.how-it-works {
+  padding: 80px 24px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.steps {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 48px;
+}
+
+.step {
+  text-align: center;
+  animation: fadeInUp 0.6s ease backwards;
+}
+
+.step:nth-child(1) { animation-delay: 0.1s; }
+.step:nth-child(2) { animation-delay: 0.2s; }
+.step:nth-child(3) { animation-delay: 0.3s; }
+
+.step-number {
+  width: 72px;
+  height: 72px;
+  background: var(--gradient-1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text);
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.step-content h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.step-content p {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* =======================
+   STATS
+======================= */
+.stats {
+  padding: 80px 24px;
+  background: var(--bg);
+}
+
+.stats-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+}
+
+.stat {
+  text-align: center;
+  padding: 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s;
+}
+
+.stat:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
+}
+
+.stat-number {
+  font-family: 'Sora', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* =======================
+   CTA
+======================= */
+.cta {
+  padding: 120px 24px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.cta-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted);
+  margin-bottom: 40px;
+  font-weight: 500;
+}
+
+/* =======================
+   FOOTER
+======================= */
+.footer {
+  background: var(--bg);
+  padding: 64px 24px 32px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-section h4 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  font-size: 15px;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+  padding-left: 4px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .cta-title {
+    font-size: 2rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="bg-accent"></div>
+  <div class="bg-accent-2"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="landing.html" class="logo-link">
+        <div class="logo-icon-nav">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </div>
+        <span class="logo-text">SplitPay</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html" class="btn-nav">
+          Get Started
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <a href="login.html">login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        Lightning Fast • 100% Free
+      </div>
+      <h1 class="hero-title">
+        Split Bills <span class="gradient-text">Instantly</span><br/>with Friends
+      </h1>
+      <p class="hero-subtitle">
+        The smartest way to split expenses. No signup required. Fair, fast, and completely free.
+      </p>
+      <div class="hero-buttons">
+        <a href="index.html" class="btn-primary-hero">
+          Start Splitting Now
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <a href="dashboard.html" class="btn-secondary-hero">
+          View Dashboard
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <span class="section-badge">Features</span>
+      <h2 class="section-title">Everything you need to split bills</h2>
+    </div>
+    <div class="scroll-container">
+      <!-- First Row - Scrolling Left -->
+      <div class="scroll-row">
+        <!-- First set of cards -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="feature-title">Lightning Fast</h3>
+          <p class="feature-description">Split bills in seconds. No signup required. Just enter the amount and start splitting.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+              <path d="M12 18V6"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Smart Calculations</h3>
+          <p class="feature-description">Automatic tip and tax calculations. Handle equal or custom splits with ease.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Track Friends</h3>
+          <p class="feature-description">Add friends, track who paid, and keep everyone accountable. No more awkward reminders.</p>
+        </div>
+        <!-- Duplicate for seamless loop -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="feature-title">Lightning Fast</h3>
+          <p class="feature-description">Split bills in seconds. No signup required. Just enter the amount and start splitting.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+              <path d="M12 18V6"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Smart Calculations</h3>
+          <p class="feature-description">Automatic tip and tax calculations. Handle equal or custom splits with ease.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Track Friends</h3>
+          <p class="feature-description">Add friends, track who paid, and keep everyone accountable. No more awkward reminders.</p>
+        </div>
+      </div>
+
+      <!-- Second Row - Scrolling Right -->
+      <div class="scroll-row">
+        <!-- First set of cards -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Multiple Payments</h3>
+          <p class="feature-description">Pay via UPI, wallet, or card. Generate QR codes for instant payments.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+              <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Smart History</h3>
+          <p class="feature-description">All your splits saved automatically. Filter by date and export anytime.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">100% Private</h3>
+          <p class="feature-description">All data stored locally on your device. Your splits are your business.</p>
+        </div>
+        <!-- Duplicate for seamless loop -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Multiple Payments</h3>
+          <p class="feature-description">Pay via UPI, wallet, or card. Generate QR codes for instant payments.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+              <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Smart History</h3>
+          <p class="feature-description">All your splits saved automatically. Filter by date and export anytime.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">100% Private</h3>
+          <p class="feature-description">All data stored locally on your device. Your splits are your business.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header">
+      <span class="section-badge">How It Works</span>
+      <h2 class="section-title">Split in 3 simple steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Enter Bill Details</h3>
+          <p>Add the total amount, tip percentage, and tax. Our smart calculator does the rest.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Add Your Friends</h3>
+          <p>Type in your friends' names and choose equal or custom split amounts for each person.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Pay & Track</h3>
+          <p>Pay your share instantly or generate QR codes. Track who's paid and send friendly reminders.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stats-container">
+      <div class="stat">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Bills Split</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">5K+</div>
+        <div class="stat-label">Happy Users</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">₹2M+</div>
+        <div class="stat-label">Money Settled</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4.9★</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-container">
+      <h2 class="cta-title">Ready to simplify bill splitting?</h2>
+      <p class="cta-subtitle">Join thousands of users who split bills the smart way</p>
+      <a href="index.html" class="btn-primary-hero">
+        Start Splitting Now
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    </div>
+  </section>
+  <!-- User Info & Logout Section -->
+<div style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 2px solid #8b5cf6;
+    z-index: 1000;
+">
+    <span id="userDisplay" style="color: #8b5cf6; font-weight: 600;">
+        Loading...
+    </span>
+    <button onclick="logout()" style="
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    ">
+        Logout
+    </button>
+</div>
+
+<script>
+// Display username
+window.addEventListener('load', async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/auth/check', {
+            credentials: 'include'
+        });
+        const data = await response.json();
+        
+        if (data.authenticated) {
+            document.getElementById('userDisplay').textContent = 
+                `👋 ${data.user.username}`;
+        } else {
+            window.location.href = 'login.html';
+        }
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = 'login.html';
+    }
+});
+
+async function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        await fetch('http://127.0.0.1:5000/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+}
+</script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h4>SplitPay</h4>
+        <p style="color: var(--muted); margin-top: 12px; line-height: 1.7;">
+          The smartest way to split bills with friends. Fast, fair, and free.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Product</h4>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="groups.html">Groups</a></li>
+          <li><a href="settings.html">Settings</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SplitPay. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
